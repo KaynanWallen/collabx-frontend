@@ -1,4 +1,4 @@
-import { BellRing, ChevronDown, ChevronRight, Filter, Folders, MessageSquare, Search, Star, ThumbsDown, ThumbsUp } from "lucide-react";
+import { AlignLeft, BellRing, Filter, Folders, MessageSquare, Search } from "lucide-react";
 import CardProject from "~/components/explore/CardProject";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -6,9 +6,7 @@ import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
@@ -19,51 +17,12 @@ export default function Index() {
       <div className="w-screen h-screen grid grid-rows-[72px_1fr] justify-items-center gap-6">
         <header className="max-w-[1440px] w-screen border-b-2 px-8 py-3 flex flex-row items-center justify-between">
           <div className="flex flex-row gap-3 items-center h-full">
+            <AlignLeft className="size-10"/>
             <img src="/collabx-logo.png" className="max-h-[30px]" />
-            {/* <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <NavigationMenuLink>
-                      <a className="select-none space-y-1 flex flex-row items-center gap-2 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                        <Star className="size-5" />
-                        <p>Popular</p>
-                      </a>
-                    </NavigationMenuLink>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <NavigationMenuLink>
-                      <a className="select-none space-y-1 flex flex-row items-center gap-2 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                        <Star className="size-5" />
-                        <p>Popular</p>
-                      </a>
-                    </NavigationMenuLink>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu> */}
-            <ul className="flex flex-row gap-1">
-              <li className="flex flex-row items-center gap-1 text-[#1D1D1D]/80 px-2">
-                <p>Explorar</p>
-                <ChevronDown className="text-[#1D1D1D]/80 size-4"/>
-              </li>
-
-              <li className="flex flex-row gap-1 text-[#1D1D1D]/80 px-2">
-                <p>Procurar serviço</p>
-              </li>
-
-              <li className="flex flex-row gap-1 text-[#1D1D1D]/80 px-2">
-                <p>Procurar freelancer</p>
-              </li>
-
-              <li className="flex flex-row gap-1 text-[#1D1D1D]/80 px-2">
-                <p>Blog</p>
-              </li>
-            </ul>
+            <span className="flex flex-row items-center relative w-[280px]">
+              <Input placeholder="Procurando algo expecifico?" />
+              <Search className="absolute right-2 text-muted-foreground" />
+            </span>
           </div>
 
           <div className="flex flex-row gap-2 items-center">
@@ -115,29 +74,13 @@ export default function Index() {
             ideias e compartilhe seu feedback. Conecte-se, colabore e
             inspire-se!
           </p>
-
-          <span className="flex flex-row items-center relative">
-            <Input placeholder="Procurando algo expecifico?" />
-            <Search className="absolute right-2 text-muted-foreground" />
-          </span>
-
-          <div className="flex flex-row items-center gap-4 justify-center">
-            <p className="font-medium">Pesquisas Recentes: </p>
-            <span className="flex flex-row gap-3">
-              <Badge variant={"secondary"} className="px-3 py-2">
-                Montes
-              </Badge>
-            </span>
-          </div>
         </section>
 
         <section className="w-full flex flex-col gap-4">
           <header className="w-full flex flex-row justify-between">
-            <Select defaultValue='relevance'>
+            <Select defaultValue="relevance">
               <SelectTrigger className="w-[180px]">
-                <SelectValue
-                  placeholder="Select a fruit"
-                />
+                <SelectValue placeholder="Select a fruit" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="relevance">Relevância</SelectItem>
@@ -149,29 +92,47 @@ export default function Index() {
             </Select>
 
             <span className="flex flex-row gap-2">
-              <Badge variant={"secondary"} className="px-3 py-1 text-muted-foreground text-xl font-semibold cursor-pointer">
+              <Badge
+                variant={"secondary"}
+                className="px-3 py-1 text-muted-foreground text-xl font-semibold cursor-pointer"
+              >
                 Descobrir
               </Badge>
 
-              <Badge variant={"secondary"} className="px-3 py-1 text-muted-foreground text-xl font-semibold bg-transparent cursor-pointer">
+              <Badge
+                variant={"secondary"}
+                className="px-3 py-1 text-muted-foreground text-xl font-semibold bg-transparent cursor-pointer"
+              >
                 Sites
               </Badge>
 
-              <Badge variant={"secondary"} className="px-3 py-1 text-muted-foreground text-xl font-semibold bg-transparent cursor-pointer">
+              <Badge
+                variant={"secondary"}
+                className="px-3 py-1 text-muted-foreground text-xl font-semibold bg-transparent cursor-pointer"
+              >
                 APIs
               </Badge>
 
-              <Badge variant={"secondary"} className="px-3 py-1 text-muted-foreground text-xl font-semibold bg-transparent cursor-pointer">
+              <Badge
+                variant={"secondary"}
+                className="px-3 py-1 text-muted-foreground text-xl font-semibold bg-transparent cursor-pointer"
+              >
                 Designs
               </Badge>
 
-              <Badge variant={"secondary"} className="px-3 py-1 text-muted-foreground text-xl font-semibold bg-transparent cursor-pointer">
+              <Badge
+                variant={"secondary"}
+                className="px-3 py-1 text-muted-foreground text-xl font-semibold bg-transparent cursor-pointer"
+              >
                 Outros
               </Badge>
             </span>
-            
-            <Badge className="flex flex-row gap-3 text-muted-foreground font-semibold text-lg" variant={'outline'}>
-              <Filter className="text-muted-foreground"/>
+
+            <Badge
+              className="flex flex-row gap-3 text-muted-foreground font-semibold text-lg"
+              variant={"outline"}
+            >
+              <Filter className="text-muted-foreground" />
               Filtros
             </Badge>
           </header>
