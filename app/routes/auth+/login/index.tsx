@@ -143,11 +143,11 @@ export default function Login() {
                       autoComplete="email"
                       autoCorrect="off"
                       disabled={isLoading}
-                      {...register('email', {required: 'Campo obrigatório'})}
+                      {...register('email')}
                       className="pl-10 input-transition animate-fade-in animate-delay-100"
+                      required
                     />
                   </div>
-                  {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -175,14 +175,9 @@ export default function Login() {
                       placeholder="••••••••"
                       autoComplete="current-password"
                       disabled={isLoading}
-                      {...register('password', {
-                        required: 'Campo obrigatório',
-                        minLength: {
-                          value: 4,
-                          message: 'Deve conter mais de 4 caracteres'
-                        }
-                      })}
+                      {...register('password')}
                       className="pl-10 pr-10 input-transition animate-fade-in animate-delay-200"
+                      required
                     />
                     <button
                       type="button"
@@ -199,7 +194,6 @@ export default function Login() {
                       )}
                     </button>
                   </div>
-                  {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
                 </div>
               </div>
               <Button

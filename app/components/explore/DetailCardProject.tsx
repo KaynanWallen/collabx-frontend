@@ -1,6 +1,7 @@
 import * as React from "react";
 import {
   ChevronUp,
+  CornerDownRight,
   Github,
   MessageSquare,
   Minus,
@@ -24,6 +25,11 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import { Textarea } from "../ui/textarea";
+import Comments from "./Comments";
+import InputComment from "./InputComment";
+import { currentUser, initialComments, users } from "~/data/mockData";
+import { CommentData } from "~/@types/comment";
+import { useToast } from "~/hooks/use-toast";
 
 interface DetailCardProjectProps {
   detailCardOpen: boolean;
@@ -34,14 +40,35 @@ export default function DetailCardProject({
   detailCardOpen,
   setDetailCardOpen,
 }: DetailCardProjectProps) {
+  const [comments, setComments] = React.useState<CommentData[]>(initialComments);
+  const { toast } = useToast();
+
+  
+  const addComment = (content: string) => {
+    const newComment: CommentData = {
+      id: `comment${Date.now()}`,
+      user: currentUser,
+      content,
+      createdAt: new Date(),
+      replies: []
+    };
+    
+    setComments([newComment, ...comments]);
+    toast({
+      title: "Comment posted",
+      description: "Your comment has been posted successfully",
+      duration: 3000,
+    });
+  };
+
   return (
     <>
       <Drawer open={detailCardOpen} onOpenChange={setDetailCardOpen}>
         <DrawerContent className="max-h-[95vh] w-[95vw] h-[95vh] mx-auto gap-4">
-          <ScrollArea className="max-h-[95vh] w-[95vw] h-[95vh] mx-auto px-16 pt-10 flex flex-col gap-4">
+          <ScrollArea className="max-h-[95vh] w-[95vw] h-[95vh] mx-auto px-16 pt-10 flex flex-col">
             <section className="W-full min-w-full h-full max-h-[728px] min-h-[728px] bg-[#DDDDDD] rounded-md"></section>
 
-            <section className="px-6 flex flex-col gap-5 mb-5">
+            <section className="px-6 flex flex-col gap-5 mb-5 mt-5">
               <header className="flex flex-col gap-3 border-b pb-2">
                 <div className="flex flex-row justify-between items-center">
                   <span className="flex flex-row gap-3 items-center">
@@ -139,136 +166,10 @@ export default function DetailCardProject({
                 </span>
                 
                 {/* Novo comentário */}
-                <div className="flex flex-row gap-3">
-                    <span className="size-12 bg-pink-800 rounded-md flex items-center justify-center text-white">
-                      KW
-                    </span>
-
-                    <section className="flex flex-col gap-3 w-full">
-                      <Textarea className="h-52"/>
-                      <span>
-                        <Button>
-                          Comentar
-                        </Button>
-                      </span>
-                    </section>
-                </div>
+                <InputComment  users={users} onSubmit={addComment}/>
                 
                 {/* Comentários */}
-                <ul>
-                  <li className="flex flex-row gap-3 bg-[#F1F5F9] p-3 rounded-sm">
-                    <span className="size-12 bg-pink-800 rounded-md flex items-center justify-center text-white">
-                      KW
-                    </span>
-
-                    <section className="flex flex-col gap-3 w-full">
-                      <span className="flex flex-col gap-1">
-                        <p className="font-bold text-md">Kaynan Wallen</p>
-                        <p className="text-[#1E1E1E]/75 font-semibold text-sm">
-                          12/02/2024 13:22
-                        </p>
-                      </span>
-
-                      <span>
-                        <p className="text-md">Projeto muito interessante! Adorei a ideia.</p>
-                      </span>
-
-                      <span className="flex flex-row gap-5">
-                        <li className="flex flex-row items-center gap-2 font-semibold text-lg">
-                          <ThumbsUp className="size-5 text-[#22C55E]" />
-                          12
-                        </li>
-
-                        <li className="flex flex-row items-center gap-2 font-semibold text-lg">
-                          <ThumbsDown className="size-5 text-[#EF4444]" />3
-                        </li>
-
-                        <li className="flex flex-row items-center gap-2 font-semibold text-lg">
-                          <MessageSquare className="size-5 text-[#3B82F6]" />
-                          Responder
-                        </li>
-                      </span>
-                      
-                      {/* Sub comentários */}
-                      <ul className="flex flex-col gap-3">
-                        <li className="flex flex-row gap-3 bg-background p-3 rounded-sm">
-                          <span className="size-12 bg-pink-800 rounded-md flex items-center justify-center text-white">
-                            KW
-                          </span>
-
-                          <section className="flex flex-col gap-3 w-full">
-                            <span className="flex flex-col gap-1">
-                              <p className="font-bold text-md">Kaynan Wallen</p>
-                              <p className="text-[#1E1E1E]/75 font-semibold text-sm">
-                                12/02/2024 13:22
-                              </p>
-                            </span>
-
-                            <span>
-                              <p className="text-md">Projeto muito interessante! Adorei a ideia.</p>
-                            </span>
-
-                            <span className="flex flex-row gap-5">
-                              <li className="flex flex-row items-center gap-2 font-semibold text-lg">
-                                <ThumbsUp className="size-5 text-[#22C55E]" />
-                                12
-                              </li>
-
-                              <li className="flex flex-row items-center gap-2 font-semibold text-lg">
-                                <ThumbsDown className="size-5 text-[#EF4444]" />3
-                              </li>
-
-                              <li className="flex flex-row items-center gap-2 font-semibold text-lg">
-                                <MessageSquare className="size-5 text-[#3B82F6]" />
-                                Marcar
-                              </li>
-                            </span>
-                          </section>
-                        </li>
-
-                        <li className="flex flex-row gap-3 bg-background p-3 rounded-sm">
-                          <span className="size-12 bg-pink-800 rounded-md flex items-center justify-center text-white">
-                            KW
-                          </span>
-
-                          <section className="flex flex-col gap-3 w-full">
-                            <span className="flex flex-col gap-1">
-                              <p className="font-bold text-md">Kaynan Wallen</p>
-                              <p className="text-[#1E1E1E]/75 font-semibold text-sm">
-                                12/02/2024 13:22
-                              </p>
-                            </span>
-
-                            <span>
-                              <p className="text-md">Projeto muito interessante! Adorei a ideia.</p>
-                            </span>
-
-                            <span className="flex flex-row gap-5">
-                              <li className="flex flex-row items-center gap-2 font-semibold text-lg">
-                                <ThumbsUp className="size-5 text-[#22C55E]" />
-                                12
-                              </li>
-
-                              <li className="flex flex-row items-center gap-2 font-semibold text-lg">
-                                <ThumbsDown className="size-5 text-[#EF4444]" />3
-                              </li>
-
-                              <li className="flex flex-row items-center gap-2 font-semibold text-lg">
-                                <MessageSquare className="size-5 text-[#3B82F6]" />
-                                Marcar
-                              </li>
-                            </span>
-                          </section>
-                        </li>
-
-                        <li className="flex flex-row gap-1 items-center">
-                          <p className="font-semibold text-xl">Ver menos</p>
-                          <ChevronUp />
-                        </li>
-                      </ul>
-                    </section>
-                  </li>
-                </ul>
+                <Comments />
               </footer>
             </section>
           </ScrollArea>

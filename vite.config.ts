@@ -12,7 +12,6 @@ declare module "@remix-run/node" {
 export default defineConfig({
   server: {
     host: "127.0.0.1",
-    port: 2222,
     cors: false,
     hmr: {
       host: "127.0.0.1",
