@@ -1,6 +1,5 @@
 import { LoginForm } from "~/components/LoginForm";
 import { useEffect, useState } from "react";
-import { ActionFunctionArgs, useNavigate, useSubmit } from "react-router-dom";
 import { useToast } from "~/hooks/use-toast";
 import { Label } from "~/components/ui/label";
 import { EyeIcon, EyeOffIcon, LockIcon, UserIcon } from "lucide-react";
@@ -10,7 +9,10 @@ import { AccountLogin } from "~/interfaces/account/login.interface";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { parseWithZod } from "@conform-to/zod";
-
+import SignIn from "~/@api/routes/auth/login";
+import { createUserSession, getUserSession } from "~/utils/session.server";
+import { json, useActionData, redirect, useNavigate, useSubmit } from "@remix-run/react";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 
 const loginSchema = z.object({
   email: z
@@ -23,27 +25,50 @@ const loginSchema = z.object({
   // userDevice: z.string().optional(),
 });
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const sessionData = await getUserSession(request)
+  if(sessionData){
+    return redirect('/')
+  }
+
+  return json({})
+}
+
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const variables = await request.json();
 
     // Usa safeParse para evitar exceptions
-    const result = loginSchema.safeParse(variables);
+    const loginSchemaValidate = loginSchema.safeParse(variables);
 
-    if (!result.success) {
-      console.error("Erro de validação:", result.error.format());
-      return { success: false, errors: result.error.format() };
+    if (!loginSchemaValidate.success) {
+      console.error("Erro de validação:", loginSchemaValidate.error.format());
+      return {
+        success: false,
+        error: loginSchemaValidate.error.format(),
+        status: 401,
+      };
     }
 
-    console.log("Dados validados:", result.data);
-    return { success: true, data: result.data };
+    const responseSignIn = await SignIn(loginSchemaValidate.data);
+
+    if ("err" in responseSignIn) {
+      return {
+        success: false,
+        error: responseSignIn.err.message,
+        status: responseSignIn.status,
+      };
+    }
+
+    return await createUserSession({ request, data: {
+      token: responseSignIn.access_token
+    } });
   } catch (error) {
     console.error("Erro desconhecido:", error);
     return { success: false, error: "Erro interno do servidor" };
   }
 };
-
 
 export default function Login() {
   const {
@@ -51,29 +76,43 @@ export default function Login() {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<AccountLogin>()
-
+  } = useForm<AccountLogin>();
+  const ActionData = useActionData<typeof action>();
   const navigate = useNavigate();
   const [mounted, setMounted] = useState(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [stateButton, setStateButton] = useState<
+    "loading" | "error" | "default"
+  >("default");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  
+
   const { toast } = useToast();
-  const submit = useSubmit()
+  const submit = useSubmit();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  
+
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
   }, []);
-  
+
+  useEffect(() => {
+    if (ActionData) {
+      console.log(ActionData)
+      if ("error" in ActionData) {
+        setStateButton("error");
+        setTimeout(() => {
+          setStateButton("default");
+        }, 2500);
+      }
+    }
+  }, [ActionData]);
+
   const onSubmit: SubmitHandler<AccountLogin> = (data) => {
-    console.log(data)
+    console.log(data);
     submit({ ...data }, { method: "POST", encType: "application/json" });
-  }
+  };
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 sm:p-8 md:p-12 lg:p-16 overflow-hidden">
@@ -142,12 +181,18 @@ export default function Login() {
                       autoCapitalize="none"
                       autoComplete="email"
                       autoCorrect="off"
-                      disabled={isLoading}
-                      {...register('email')}
+                      disabled={stateButton == "loading"}
+                      {...register("email", {
+                        required: "Campo obrigatório",
+                      })}
                       className="pl-10 input-transition animate-fade-in animate-delay-100"
-                      required
                     />
                   </div>
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -174,10 +219,14 @@ export default function Login() {
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
                       autoComplete="current-password"
-                      disabled={isLoading}
-                      {...register('password')}
+                      disabled={stateButton == "loading"}
+                      {...register("password", {
+                        minLength: {
+                          value: 4,
+                          message: "Minimo de 4 caracteres",
+                        },
+                      })}
                       className="pl-10 pr-10 input-transition animate-fade-in animate-delay-200"
-                      required
                     />
                     <button
                       type="button"
@@ -194,22 +243,37 @@ export default function Login() {
                       )}
                     </button>
                   </div>
+                  {errors.password && (
+                    <p className="text-red-500 text-sm">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
               </div>
-              <Button
-                type="submit"
-                className="w-full font-medium transition-all duration-200 shadow-sm animate-fade-in animate-delay-300"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <div className="flex items-center justify-center">
-                    <div className="h-4 w-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin mr-2"></div>
-                    Entrando...
-                  </div>
-                ) : (
-                  "Entrar"
-                )}
-              </Button>
+              {stateButton == "default" || stateButton == "loading" ? (
+                <Button
+                  type="submit"
+                  className="w-full font-medium transition-all duration-200 shadow-sm animate-fade-in animate-delay-300"
+                  disabled={stateButton == "loading"}
+                >
+                  {stateButton == "loading" ? (
+                    <div className="flex items-center justify-center">
+                      <div className="h-4 w-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin mr-2"></div>
+                      Entrando...
+                    </div>
+                  ) : (
+                    "Entrar"
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  variant={"destructive"}
+                  className="w-full font-medium transition-all duration-200 shadow-sm animate-fade-in animate-delay-300"
+                >
+                  Credenciais incorretas
+                </Button>
+              )}
             </form>
             <div className="relative my-2 animate-fade-in animate-delay-300">
               <div className="absolute inset-0 flex items-center">
@@ -225,7 +289,7 @@ export default function Login() {
               <Button
                 variant="outline"
                 type="button"
-                disabled={isLoading}
+                disabled={stateButton == "loading"}
                 className="transition-all duration-200"
               >
                 <svg
@@ -245,7 +309,7 @@ export default function Login() {
               <Button
                 variant="outline"
                 type="button"
-                disabled={isLoading}
+                disabled={stateButton == "loading"}
                 className="transition-all duration-200"
               >
                 <svg
