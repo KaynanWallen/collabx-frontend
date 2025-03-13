@@ -1,12 +1,15 @@
 import { ActionFunctionArgs } from "@remix-run/node";
-import { useNavigate, useSubmit } from "@remix-run/react";
+import { redirect, useActionData, useNavigate, useSubmit } from "@remix-run/react";
 import { ArrowLeft, BellRing, ChevronDown, Folders, MessageSquare } from "lucide-react";
+import { useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { apiCreateProject } from "~/@api/routes/project.api";
 import NewProjectForm from "~/components/perfil/NewProjectForm";
 import { Button } from "~/components/ui/button";
+import { useToast } from "~/hooks/use-toast";
 import { ProjectFormInterface } from "~/interfaces/new-project.interface";
+import { getUserSession } from "~/utils/session.server";
 
 const projectSchema = z.object({
   title: z.string().min(1, "Título é obrigatório"),
@@ -18,6 +21,11 @@ const projectSchema = z.object({
 });
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const sessionData = await getUserSession(request)
+  if(!sessionData){
+    return redirect('/auth/login')
+  }
+
   const formData = await request.formData();
 
   // Converte para um objeto base
@@ -36,21 +44,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return new Response(JSON.stringify({ errors: result.error.format() }), { status: 400 });
   }
 
-  const createProjectResponse = await apiCreateProject(result.data);
+  const createProjectResponse = await apiCreateProject(result.data, sessionData.token);
 
-  console.log(createProjectResponse)
   if ("err" in createProjectResponse) {
     return new Response(JSON.stringify({ errors: createProjectResponse.err.message }), { status: createProjectResponse.status });
   }
 
-  return null;
+  return redirect('/perfil');
 }
 
 export default function Index() {
+  const ActionData = useActionData<typeof action>()
   const methods = useForm<ProjectFormInterface>()
   const navigate = useNavigate()
   const submit = useSubmit()
-
+  const { toast }= useToast()
   const onSubmit: SubmitHandler<ProjectFormInterface> = (data) => {
     const formData = new FormData()
     console.log(data)
@@ -65,6 +73,15 @@ export default function Index() {
     submit(formData, {method: 'POST', encType: 'multipart/form-data'})
   }
 
+  useEffect(() => {
+    if(ActionData){
+      toast({
+        description: 'Ocorreu um erro ao criar o projeto',
+        variant: 'destructive'
+      })
+    } 
+  }, [])
+  
   return (
     <>
       <div className="w-screen h-screen grid grid-rows-[72px_1fr] justify-items-center gap-6">

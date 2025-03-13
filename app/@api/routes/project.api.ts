@@ -24,6 +24,18 @@ export const apiCreateProject = async(project: NewProjectDTOType, token: string)
       return response
     }
     
+    const formDataImage = new FormData()
+    formDataImage.append('file', project.images[0])
+    const addImageInProjectResponse = api.post(`/projects/${response.id}/add-image`, formDataImage, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      return res.data.url
+    }).catch((err) => {
+      const messageError = err.response?.data as { message: string} || {message: 'Erro ao vincular imagem'}
+      return { err: {message: messageError.message, data: err.response}, status: err.response?.status || 500}
+    })
 
     return response
   } catch (error) {

@@ -1,17 +1,8 @@
-import { BellRing, ChevronDown, ChevronRight, Filter, Folders, MessageSquare, Search, Star, ThumbsDown, ThumbsUp } from "lucide-react";
+import { BellRing, ChevronDown, Folders, Github, Globe, Linkedin, Mail, MapPin, MessageSquare, User } from "lucide-react";
 import CardProject from "~/components/explore/CardProject";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
 
 export default function Index() {
   return (
@@ -103,92 +94,107 @@ export default function Index() {
             </section>
           </div>
         </header>
-        
-        <div className="w-screen max-w-[1440px] overflow-y-auto">
-          <main className="flex flex-col justify-center items-center gap-6">
-            <section className="max-w-[728px] flex flex-col gap-3">
-              <p className="text-4xl font-bold text-center">
-                Descubra projetos incríveis, inspire-se com novas ideias e
-                compartilhe seu feedback!
-              </p>
-              <p className="text-center text-lg">
-                Explore projetos inovadores de desenvolvedores talentosos, troque
-                ideias e compartilhe seu feedback. Conecte-se, colabore e
-                inspire-se!
-              </p>
 
-              <span className="flex flex-row items-center relative">
-                <Input placeholder="Procurando algo expecifico?" />
-                <Search className="absolute right-2 text-muted-foreground" />
-              </span>
+        <div className="w-screen max-w-[1440px] overflow-y-auto flex flex-col gap-3 bg-gray-100">
+          <section className="flex flex-col">
+            <div className="w-full h-28 bg-blue-500 rounded-t-lg"></div>
 
-              <div className="flex flex-row items-center gap-4 justify-center">
-                <p className="font-medium">Pesquisas Recentes: </p>
-                <span className="flex flex-row gap-3">
-                  <Badge variant={"secondary"} className="px-3 py-2">
-                    Montes
-                  </Badge>
-                </span>
-              </div>
-            </section>
+            <div className="bg-gray-100 px-6 py-2 relative">
+              <div className="flex flex-col md:flex-row">
+                {/* Avatar */}
+                <Avatar className="w-32 h-32 absolute -top-16">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
 
-            <section className="w-full flex flex-col gap-4">
-              <header className="w-full flex flex-row justify-between">
-                <Select defaultValue='relevance'>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue
-                      placeholder="Select a fruit"
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="relevance">Relevância</SelectItem>
-                    <SelectItem value="old">Mais antigo</SelectItem>
-                    <SelectItem value="new">Mais novo</SelectItem>
-                    <SelectItem value="other">Outro</SelectItem>
-                    <SelectItem value="other2">Outro</SelectItem>
-                  </SelectContent>
-                </Select>
 
-                <span className="flex flex-row gap-2">
-                  <Badge variant={"secondary"} className="px-3 py-1 text-muted-foreground text-xl font-semibold cursor-pointer">
-                    Descobrir
-                  </Badge>
-
-                  <Badge variant={"secondary"} className="px-3 py-1 text-muted-foreground text-xl font-semibold bg-transparent cursor-pointer">
-                    Sites
-                  </Badge>
-
-                  <Badge variant={"secondary"} className="px-3 py-1 text-muted-foreground text-xl font-semibold bg-transparent cursor-pointer">
-                    APIs
-                  </Badge>
-
-                  <Badge variant={"secondary"} className="px-3 py-1 text-muted-foreground text-xl font-semibold bg-transparent cursor-pointer">
-                    Designs
-                  </Badge>
-
-                  <Badge variant={"secondary"} className="px-3 py-1 text-muted-foreground text-xl font-semibold bg-transparent cursor-pointer">
-                    Outros
-                  </Badge>
+                <span className="mt-24 md:mt-0 md:ml-36">
+                  <h1 className="text-3xl font-bold">Kaynan Wallen</h1>
+                  <p className="text-gray-600">Desenvolvedor Freelancer</p>
                 </span>
 
-                <Badge className="flex flex-row gap-3 text-muted-foreground font-semibold text-lg" variant={'outline'}>
-                  <Filter className="text-muted-foreground" />
-                  Filtros
-                </Badge>
-              </header>
+                <span className="mt-4 md:mt-0 md:ml-auto flex flex-wrap gap-2">
+                  <Button
+                    variant="default"
+                    className="bg-gray-900 hover:bg-gray-700 flex items-center"
+                  >
+                    <User className="w-4 h-4 mr-2" />
+                    Seguir
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border-gray-300 flex items-center"
+                  >
+                    <Github className="w-4 h-4 mr-2" />
+                    GitHub
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border-gray-300 flex items-center"
+                  >
+                    <Linkedin className="w-4 h-4 mr-2" />
+                    LinkedIn
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border-gray-300 flex items-center"
+                  >
+                    <Globe className="w-4 h-4 mr-2" />
+                    Portfólio
+                  </Button>
+                </span>
+              </div>
 
-              <div className="flex flex-row flex-wrap gap-4 justify-center">
-                <CardProject />
-                <CardProject />
+              <div className="mt-4 flex flex-col md:flex-row md:items-center gap-4">
+                <div className="flex items-center text-gray-600">
+                  <MapPin className="w-5 h-5 mr-2" />
+                  <span>São Paulo, Brasil</span>
+                </div>
+                <div className="flex items-center text-gray-600">
+                  <Mail className="w-5 h-5 mr-2" />
+                  <span>wallenkaynan@gmail.com</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <span className="px-6 flex flex-col gap-2">
+            <h2 className="text-2xl font-bold">Resumo</h2>
+            <p className="text-gray-800 leading-relaxed">Desenvolvedor Full Stack apaixonado por criar soluções inovadoras e transformar ideias em realidade através da tecnologia. Com experiência sólida em React, Node.js e TypeScript, atuo no desenvolvimento de aplicações web escaláveis, intuitivas e de alto desempenho. Sempre em busca de novos desafios e aprendizados, gosto de explorar novas tecnologias, aprimorar minhas habilidades e contribuir para projetos que impactam positivamente a experiência dos usuários.</p>
+          </span>
+
+          <span className="px-6 flex flex-col gap-2">
+            <h2 className="text-2xl font-bold">Habilidades</h2>
+            <div className="flex flex-row flex-wrap gap-3">
+              <Badge className="px-3 py-2 text-xl bg-background text-muted-foreground hover:bg-background/80 cursor-pointer">
+                Montes
+              </Badge>
+
+              <Badge className="px-3 py-2 text-xl bg-background text-muted-foreground hover:bg-background/80 cursor-pointer">
+                Montes
+              </Badge>
+
+              <Badge className="px-3 py-2 text-xl bg-background text-muted-foreground hover:bg-background/80 cursor-pointer">
+                Montes
+              </Badge>
+
+              <Badge className="px-3 py-2 text-xl bg-background text-muted-foreground hover:bg-background/80 cursor-pointer">
+                Montes
+              </Badge>
+            </div>
+          </span>
+
+          <section className="px-6 flex flex-col gap-2">
+            <h2 className="text-2xl font-bold">Projetos</h2>
+            <div className="flex flex-row gap-4 justify-center">
                 <CardProject />
                 <CardProject />
                 <CardProject />
                 <CardProject />
               </div>
-            </section>
-          </main>
+          </section>
         </div>
       </div>
     </>
-  );
+  )
 }

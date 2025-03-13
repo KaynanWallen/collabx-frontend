@@ -32,7 +32,7 @@ export default function CardProject() {
   }
   return (
     <>
-      <div className="max-w-[340px] min-w-[340px] min-h-[400px] max-h-[400px] bg-primary-foreground rounded-lg flex flex-col shadow-lg gap-3">
+      <div className="w-full max-w-[340px] min-h-[400px] max-h-[400px] bg-primary-foreground rounded-lg flex flex-col shadow-lg gap-3">
         <section className="min-w-full max-w-full max-h-[200px] min-h-[200px] bg-[#DDDDDD] rounded-t-lg"></section>
 
         <section className="flex flex-row gap-2 items-center px-3">
