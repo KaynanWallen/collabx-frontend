@@ -35,7 +35,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   };
 
 
-  console.log(rawData)
   // Faz a validação com Zod
   const result = projectSchema.safeParse(rawData);
   

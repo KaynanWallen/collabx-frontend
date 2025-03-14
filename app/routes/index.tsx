@@ -1,5 +1,8 @@
+import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { BellRing, ChevronDown, ChevronRight, Filter, Folders, MessageSquare, Search, Star, ThumbsDown, ThumbsUp } from "lucide-react";
 import CardProject from "~/components/explore/CardProject";
+import { useProjects } from "~/components/explore/hooks/UseProject";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -13,7 +16,31 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  return json({request})
+}
+
 export default function Index() {
+
+  const {
+    paginatedProjects,
+    projects,
+    setProjects,
+    totalProjects,
+    searchQuery,
+    setSearchQuery,
+    statusFilter,
+    setStatusFilter,
+    dateFilter,
+    setDateFilter,
+    currentPage,
+    setCurrentPage,
+    itemsPerPage,
+    setItemsPerPage,
+    totalPages,
+  } = useProjects();
+  
+  console.log(projects)
   return (
     <>
       <div className="w-screen h-screen grid grid-rows-[72px_1fr] justify-items-center gap-6">
