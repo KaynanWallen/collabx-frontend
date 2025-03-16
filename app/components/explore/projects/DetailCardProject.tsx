@@ -22,17 +22,16 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "~/components/ui/drawer";
-import { ScrollArea } from "../ui/scroll-area";
-import { Badge } from "../ui/badge";
-import { Separator } from "../ui/separator";
-import { Textarea } from "../ui/textarea";
-import Comments from "./Comments";
-import InputComment from "./InputComment";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Badge } from "~/components/ui/badge";
+import { Separator } from "~/components/ui/separator";
+import { Textarea } from "~/components/ui/textarea";
 import { currentUser, initialComments, users } from "~/data/mockData";
 import { CommentType } from "~/@types/comment";
 import { useToast } from "~/hooks/use-toast";
 import { ProjectType } from "~/@types/project";
-import CommentsSection from "./Comments";
+import InputComment from "../InputComment";
+import CommentsSection from "../Comments";
 
 interface DetailCardProjectProps {
   detailCardOpen: boolean;

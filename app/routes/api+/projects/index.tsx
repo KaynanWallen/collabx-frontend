@@ -8,7 +8,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       return json({...projectsResponse})
     }
 
-    return json({...projectsResponse}, {status: 200})
+    return json({projects: projectsResponse}, {status: 200})
   } catch (error) {
     return json({err: error}, {status: 500})
     

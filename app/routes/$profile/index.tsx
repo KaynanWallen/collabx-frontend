@@ -187,10 +187,10 @@ export default function Index() {
           <section className="px-6 flex flex-col gap-2">
             <h2 className="text-2xl font-bold">Projetos</h2>
             <div className="flex flex-row gap-4 justify-center">
+                {/* <CardProject />
                 <CardProject />
                 <CardProject />
-                <CardProject />
-                <CardProject />
+                <CardProject /> */}
               </div>
           </section>
         </div>

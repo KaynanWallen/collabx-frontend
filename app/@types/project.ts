@@ -1,3 +1,6 @@
+import { CommentType } from "./comment";
+import { ProfileType } from "./profile";
+
 export type ProjectType = {
   id: number;
   authorId: number;
@@ -12,4 +15,6 @@ export type ProjectType = {
   commentCount: number;
   createdAt: Date;
   lastModified: Date;
+  author: ProfileType;
+  comments: CommentType[];
 }

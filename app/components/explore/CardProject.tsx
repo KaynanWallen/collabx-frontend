@@ -8,8 +8,9 @@ import {
 import { useState } from "react";
 import { useToast } from "~/hooks/use-toast";
 import DetailCardProject from "./DetailCardProject";
+import { ProjectType } from "~/@types/project";
 
-export default function CardProject() {
+export default function CardProject({project}: {project: ProjectType}) {
   const [isFavorite, setIsFavorite] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const {toast} = useToast()
@@ -37,19 +38,17 @@ export default function CardProject() {
 
         <section className="flex flex-row gap-2 items-center px-3">
           <div className="size-8 bg-pink-800 rounded-md flex items-center justify-center text-white text-sm">
-            KW
+            {project.author.name.charAt(0)}
           </div>
 
-          <p className="font-bold text-sm">Kaynan Wallen</p>
+          <p className="font-bold text-sm">{project.author.name}</p>
         </section>
 
         <section className="px-3 gap-3 flex flex-col justify-between h-full pb-3">
           <span>
             <p className="font-semibold text-xl">Nome do Projeto</p>
             <p className="line-clamp-4 text-xs font-normal">
-              Lorem ipsum odor amet, consectetuer adipiscing elit. Fames
-              sollicitudin duis nascetur, quis magna arcu. Vestibulum feugiat
-              nascetur in tellus senectus fringilla dictumst.
+              {project.content}
             </p>
           </span>
 
@@ -57,16 +56,17 @@ export default function CardProject() {
             <div className="flex flex-row gap-2">
               <span className="flex flex-row items-center gap-2 font-semibold">
                 <ThumbsUp className="size-5 text-[#22C55E]" />
-                12
+                {project.likeCount}
               </span>
 
               <span className="flex flex-row items-center gap-2 font-semibold">
-                <ThumbsDown className="size-5 text-[#EF4444]" />3
+                <ThumbsDown className="size-5 text-[#EF4444]" />
+                {project.dislikeCount}
               </span>
 
               <span className="flex flex-row items-center gap-2 font-semibold pl-2">
                 <MessageSquare className="size-5 text-[#3B82F6]" />
-                18
+                {project.comments.length}
               </span>
 
               <Star className={`size-5 text-[#F8C100] cursor-pointer ${isFavorite && 'fill-[#F8C100]'}`} onClick={toogleFavorite}/>
@@ -80,7 +80,7 @@ export default function CardProject() {
         </section>
       </div>
 
-      <DetailCardProject detailCardOpen={isOpen} setDetailCardOpen={setIsOpen}/>
+      <DetailCardProject detailCardOpen={isOpen} setDetailCardOpen={setIsOpen} project={project}/>
     </>
   );
 }

@@ -10,7 +10,7 @@ export const useProjectService = () => {
       const response = await fetch(`${baseUrl}/api/projects`, {
         method: 'GET',
       })
-      
+
       // Verifica se o status HTTP indica erro (ex: 401, 500)
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({
@@ -18,8 +18,8 @@ export const useProjectService = () => {
         }));
         return { error: errorData.err as string, status: response.status };
       }
-    
-      return await response.json() as ProjectViewInterface[]
+
+      return (await response.json()).projects as ProjectViewInterface[]
     } catch (error) {
       return {error , status: 500}
     }
