@@ -6,15 +6,17 @@ import {
   ChevronRight,
   Filter,
   Folders,
+  Loader,
   MessageSquare,
   Search,
   Star,
   ThumbsDown,
   ThumbsUp,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ProjectType } from "~/@types/project";
 import { ExploreHero } from "~/components/explore/ExploreHero";
-import { useProjects } from "~/components/explore/hooks/UseProject";
+import { useProjects } from "~/components/explore/projects/hooks/UseProject";
 import { CardFilters } from "~/components/explore/projects/CardFilters";
 import { CardProject } from "~/components/explore/projects/CardProject";
 import { HeaderSection } from "~/components/layout/headerSection";
@@ -81,12 +83,13 @@ export default function Index() {
   const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState<string>(
-    searchParams.get("search") || ""
-  );
+  const [searchTerm, setSearchTerm] = useState<string>("")
+
   const {
     paginatedProjects,
     projects,
+    state,
+    setState,
     setProjects,
     totalProjects,
     searchQuery,
@@ -121,7 +124,7 @@ export default function Index() {
         onHandleSearchParams={onHandleSearchParams}
       />
 
-      <section>
+      <section className="w-full">
         <CardFilters />
 
         {/* Projects Grid */}
@@ -136,8 +139,19 @@ export default function Index() {
           </div>
         )}
 
+        {paginatedProjects.length == 0 && state == 'default' ? (
+          <div className="flex flex-col items-center justify-center text-muted-foreground gap-2">
+            <p className="text-sm">Nenhum Projeto Publicado</p>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center text-muted-foreground gap-2">
+          <Loader className="animate-spin"/>
+          <p className="text-sm">Carregando projetos...</p>
+        </div>
+        )}
+
         <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-6">
-          {projects.map((project) => (
+          {paginatedProjects.map((project) => (
             <CardProject project={project} key={project.id} />
           ))}
         </div>

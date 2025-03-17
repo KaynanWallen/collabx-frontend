@@ -110,6 +110,7 @@ export default function Login() {
   }, [ActionData]);
 
   const onSubmit: SubmitHandler<AccountLogin> = (data) => {
+    setStateButton('loading')
     console.log(data);
     submit({ ...data }, { method: "POST", encType: "application/json" });
   };

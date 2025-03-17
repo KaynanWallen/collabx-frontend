@@ -1,6 +1,7 @@
 export type ProfileDTOType = {
   id: number;
   accountId: number;
+  username: string;
   name: string;
   title: string;
   githubLink: string;

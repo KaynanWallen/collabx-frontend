@@ -12,6 +12,7 @@ export const useProjects = () => {
   const [dateFilter, setDateFilter] = useState<string>("todos");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(25);
+  const [state, setState] = useState<'default' | 'loading'>('default')
   const navigate = useNavigate();
   const { toast } = useToast();
   const projectService = useProjectService();
@@ -35,8 +36,9 @@ export const useProjects = () => {
       if(responseProjects.length > 0){
         setProjects(responseProjects);
       }
+    setState('default')
     };
-
+    setState('loading')
     fetchProjects();
   }, []);
 
@@ -63,6 +65,8 @@ export const useProjects = () => {
   return {
     paginatedProjects: paginatedProjects,
     totalProjects: filteredProjects.length,
+    state,
+    setState,
     searchQuery,
     setSearchQuery,
     statusFilter,

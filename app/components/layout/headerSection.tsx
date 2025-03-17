@@ -1,27 +1,32 @@
 import { BellRing, Folders, Menu, MessageSquare, Search } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Link, useSearchParams } from "@remix-run/react";
+import { Link, useNavigate, useSearchParams } from "@remix-run/react";
 import { ProfileType } from "~/@types/profile";
+import { useState } from "react";
 
 type HeaderSectionProps = {
-  variant?: string;
-  searchTerm: string | undefined;
-  setSearchTerm: (v: string) => void;
-  onHandleSearchParams: () => void;
   user: ProfileType | null;
 };
 
 export const HeaderSection = ({
-  variant = "default",
-  searchTerm,
-  setSearchTerm,
-  onHandleSearchParams,
   user
 }: HeaderSectionProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState<string>(
+    searchParams.get("search") || ""
+  );
+  const navigate = useNavigate();
 
-  const isLoggedIn = false;
+  const onHandleSearchParams = () => {
+    const params = new URLSearchParams(searchParams);
+    if (searchTerm) {
+      params.set("search", searchTerm);
+    } else {
+      params.delete("search");
+    }
+    navigate(`?${params.toString()}`, { replace: true });
+  };
 
   return (
     <header className="max-w-[1440px] w-screen border-b-2 px-8 py-3 flex flex-row items-center justify-between">
@@ -33,7 +38,9 @@ export const HeaderSection = ({
               onClick={() => {}}
             />
           )}
-          <div className="font-bold text-2xl">Collabx</div>
+          <Link to="/explore">
+            <div className="font-bold text-2xl cursor-pointer">Collabx</div>
+          </Link>
         </div>
 
         <nav className={`flex gap-6 ${searchParams.get("search") && "hidden"}`}>
@@ -106,15 +113,17 @@ export const HeaderSection = ({
             <Button className="h-12 px-6" variant={"default"}>
               Portfólio
             </Button>
-            <section className="flex flex-row gap-2">
-              <div className="size-12 bg-pink-800 rounded-md flex items-center justify-center text-white">
-                {user.name.charAt(0)}
-              </div>
-              <span>
-                <p className="font-bold ">{user.name}</p>
-                <p className="text-[#1E1E1E]/75 font-semibold">{user.title}</p>
-              </span>
-            </section>
+            <Link to={`/${user.username.replace(/\s/g, "-")}`}>
+              <section className="flex flex-row gap-2">
+                <div className="size-12 bg-pink-800 rounded-md flex items-center justify-center text-white">
+                  {user.name.charAt(0)}
+                </div>
+                <span>
+                  <p className="font-bold ">{user.name}</p>
+                  <p className="text-[#1E1E1E]/75 font-semibold">{user.title}</p>
+                </span>
+              </section>
+            </Link>
           </>
         ) : (
           <>

@@ -1,6 +1,6 @@
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Outlet, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { apiGetMeInfos } from "~/@api/routes/me.api";
 import { HeaderSection } from "~/components/layout/headerSection";
 import { getUserSession } from "~/utils/session.server";
@@ -24,29 +24,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function Layout() {
   const { user } = useLoaderData<typeof loader>()
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState<string>(
-    searchParams.get("search") || ""
-  );
-  const navigate = useNavigate();
 
-  const onHandleSearchParams = () => {
-    const params = new URLSearchParams(searchParams);
-    if (searchTerm) {
-      params.set("search", searchTerm);
-    } else {
-      params.delete("search");
-    }
-    navigate(`?${params.toString()}`, { replace: true });
-  };
   return (
     <>
       <div className="w-screen h-screen grid grid-rows-[72px_1fr] justify-items-center gap-6">
         <HeaderSection
-          variant="search"
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          onHandleSearchParams={onHandleSearchParams}
           user={user}
         />
 
