@@ -35,8 +35,9 @@ export const useProjects = () => {
       }
       if(responseProjects.length > 0){
         setProjects(responseProjects);
+        setState('default')
       }
-    setState('default')
+      setState('default')
     };
     setState('loading')
     fetchProjects();

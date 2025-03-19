@@ -3,12 +3,12 @@ import { api } from "../config";
 import { NewProjectDTOType } from "../DTO/project/new-project.dto";
 import { ProjectDTOType } from "../DTO/project/project.dto";
 import { FindProjectDTOType } from "../DTO/project/find-projects.dto.";
+import { apiGetMeInfos } from "./me.api";
 
 export const apiCreateProject = async(project: NewProjectDTOType, token: string) => {
   try {
     const response = await api.post('/projects', {
-      ...project,
-      authorId: 1
+      ...project
     }, {
       headers: {
         Authorization: `Bearer ${token}`

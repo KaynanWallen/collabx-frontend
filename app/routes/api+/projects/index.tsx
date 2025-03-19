@@ -3,6 +3,7 @@ import { apiGetAllProject } from "~/@api/routes/project.api";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
+    // const jsonData: {params?: string} = await request.json()
     const projectsResponse = await apiGetAllProject()
     if('err' in projectsResponse){
       return json({...projectsResponse})

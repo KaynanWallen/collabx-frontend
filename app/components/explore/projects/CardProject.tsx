@@ -8,7 +8,7 @@ import {
 import { useState } from "react";
 import { ProjectViewInterface } from "~/@interfaces/project.interface";
 import { Button } from "~/components/ui/button";
-import DetailCardProject from "~/components/explore/projects/DetailCardProject";
+import { ProjectDialog } from "./DialogCardProject";
 
 export const CardProject = ({project}: {project: ProjectViewInterface}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -85,8 +85,8 @@ export const CardProject = ({project}: {project: ProjectViewInterface}) => {
           </div>
         </div>
       </div>
-
-      <DetailCardProject detailCardOpen={isOpen} setDetailCardOpen={setIsOpen} project={project}/>
+      
+      <ProjectDialog detailCardOpen={isOpen} setDetailCardOpen={setIsOpen} project={project}/>
     </>
   );
 };

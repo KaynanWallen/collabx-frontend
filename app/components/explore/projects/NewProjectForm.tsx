@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import { Button } from "~/components/ui/button";
-import { X } from "lucide-react";
+import { Loader, X } from "lucide-react";
 import { useToast } from "~/hooks/use-toast";
 import { set, useFormContext } from "react-hook-form";
 import { ProjectFormInterface } from "~/interfaces/new-project.interface";
@@ -18,18 +18,9 @@ interface ProjectFormData {
 }
 
 
-export default function NewProjectForm() {
+export default function NewProjectForm({state = 'default'}: {state?: 'default' | 'loading'}) {
   const { register, watch, setValue, formState: { errors } } = useFormContext<ProjectFormInterface>()
 
-  const [formData, setFormData] = useState<ProjectFormData>({
-    title: "",
-    description: "",
-    images: [],
-    githubUrl: "",
-    linkedinUrl: "",
-    portfolioUrl: "",
-    technologies: [],
-  });
   const [newTech, setNewTech] = useState("");
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
   const { toast } = useToast();
@@ -53,11 +44,7 @@ export default function NewProjectForm() {
   };
 
   const removeImage = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-    URL.revokeObjectURL(imagePreviewUrls[index]);
+    setValue('images',  watch('images').filter((_, i) => i !== index));
     setImagePreviewUrls((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -90,7 +77,7 @@ export default function NewProjectForm() {
   return (
     <>
       <section className="space-y-6 w-full">
-        <div className="bg-primary-foreground p-6 rounded-lg space-y-6">
+        <div className="border p-6 rounded-lg space-y-6">
           <div>
             <label className="block text-primary text-sm font-medium mb-2">
               Nome do Projeto *
@@ -215,16 +202,21 @@ export default function NewProjectForm() {
                 Adicionar
               </Button>
             </div>
+            {errors.techs && <p className="text-red-500 text-sm">{errors.techs.message}</p>}
           </div>
         </div>
-
-        <Button
+        
+          <Button
           type="submit"
           form="new-project-form"
+          disabled={state == 'loading'}
         // className="w-full bg-[#991C06] hover:bg-[#7a1705] text-white"
         >
-          Adicionar Projeto
+          {state == 'loading' && <Loader className="w-5 h-5 mr-2 animate-spin" />}
+          {state == 'default' && 'Adicionar Projeto'}
+          {state == 'loading' && 'Carregando...'}
         </Button>
+        
       </section>
     </>
   )

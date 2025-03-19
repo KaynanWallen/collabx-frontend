@@ -1,11 +1,8 @@
 export type NewProjectDTOType = {
-  // authorId: number;
+  authorId: number;
   title: string;
   content: string;
-  // techs: string | null;
-  // figmaLink: string | null;
-  // githubLink: string | null;
-  // linkedinLink: string | null;
+  techs: string | null;
   images: File[];
   githubLink?: string | null | undefined;
   linkedinLink?: string | null | undefined;

@@ -139,11 +139,13 @@ export default function Index() {
           </div>
         )}
 
-        {paginatedProjects.length == 0 && state == 'default' ? (
+        {paginatedProjects.length == 0 && state == 'default' && (
           <div className="flex flex-col items-center justify-center text-muted-foreground gap-2">
             <p className="text-sm">Nenhum Projeto Publicado</p>
           </div>
-        ) : (
+        )} 
+        
+        {paginatedProjects.length == 0 && state == 'loading' && (
           <div className="flex flex-col items-center justify-center text-muted-foreground gap-2">
           <Loader className="animate-spin"/>
           <p className="text-sm">Carregando projetos...</p>
