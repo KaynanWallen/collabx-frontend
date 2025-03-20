@@ -16,7 +16,7 @@ export default function CardProject({project}: {project: ProjectType}) {
   const {toast} = useToast()
 
 
-  const toogleFavorite = () => {
+  const toggleFavorite = () => {
     if(isFavorite){
       toast({
         title: "Projeto removido dos favoritos!!",
@@ -69,7 +69,7 @@ export default function CardProject({project}: {project: ProjectType}) {
                 {project.comments.length}
               </span>
 
-              <Star className={`size-5 text-[#F8C100] cursor-pointer ${isFavorite && 'fill-[#F8C100]'}`} onClick={toogleFavorite}/>
+              <Star className={`size-5 text-[#F8C100] cursor-pointer ${isFavorite && 'fill-[#F8C100]'}`} onClick={toggleFavorite}/>
             </div>
 
             <span className="flex flex-row gap-1 items-center" onClick={() => setIsOpen(true)}>

@@ -12,7 +12,7 @@ import { ProjectDialog } from "./DialogCardProject";
 
 export const CardProject = ({project}: {project: ProjectViewInterface}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  
+
   return (
     <>
       <div

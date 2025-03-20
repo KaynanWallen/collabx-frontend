@@ -32,9 +32,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import useMyProfileStore from "~/hooks/useMyProfile";
+import { getUserSession } from "~/utils/session.server";
+import { apiGetMeInfos } from "~/@api/routes/me.api";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return json({ request });
+  const sessionData = await getUserSession(request)
+  if(!sessionData){
+    return json({user: null})
+  }
+  
+  const userRecord = await apiGetMeInfos(sessionData.token)
+  if('err' in userRecord){
+    console.log(userRecord.err.data)
+    return json({user: null})
+  }
+
+  return json({ user: userRecord });
 };
 
 const projects = [
@@ -80,11 +94,18 @@ const projects = [
 ];
 
 export default function Index() {
+  const {user} = useLoaderData<typeof loader>()
   const navigate = useNavigate();
-
+  
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState<string>("")
+  const { setProfile } = useMyProfileStore();
 
+  useEffect(() => {
+    if(user){
+      setProfile(user)
+    }
+  }, [user])
   const {
     paginatedProjects,
     projects,

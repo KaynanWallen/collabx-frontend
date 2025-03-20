@@ -31,185 +31,6 @@ interface SubComment {
   userLiked: boolean;
 }
 
-// Modelo atualizado para comentários com sub-comentários
-interface Comment {
-  id: number;
-  user: { name: string; initial: string; avatar: string | null; role: string };
-  content: string;
-  date: string;
-  likes: number;
-  userLiked: boolean;
-  subComments: SubComment[];
-  showAllReplies: boolean;
-}
-
-const mockComments: CommentInterface[] = [
-  { 
-    id: 1, 
-    authorId: 1,
-    projectId: 1,
-    author: { 
-      id: 1,
-      accountId: 101,
-      username: "kaynanwallen",
-      name: "Kaynan Wallen",
-      title: "Freelancer",
-      githubLink: "https://github.com/kaynanwallen",
-      linkedinLink: "https://linkedin.com/in/kaynanwallen",
-      twitterLink: "https://twitter.com/kaynanwallen",
-      about: "Desenvolvedor full-stack apaixonado por tecnologia.",
-      techs: "React, TypeScript, Node.js",
-      followersCount: 120,
-      followingCount: 80,
-      createdAt: "2023-05-10",
-      lastModified: "2024-02-12"
-    },
-    content: "Projeto muito interessante! Adorei a ideia.",
-    likeCount: 12,
-    dislikeCount: 0,
-    commentCount: 2,
-    createdAt: new Date("2024-02-12T13:22:00Z"),
-    subComments: [
-      {
-        id: 101,
-        content: "Concordo! Ficou excelente!",
-        likeCount: 5,
-        dislikeCount: 0,
-        commentCount: 0,
-        createdAt: new Date("2024-02-12T13:30:00Z"),
-        parentId: "1",
-        authorId: 2,
-        projectId: 1,
-        author: {
-            id: 2,
-            accountId: 102,
-            username: "mariasilva",
-            name: "Maria Silva",
-            title: "Designer",
-            githubLink: "https://github.com/mariasilva",
-            linkedinLink: "https://linkedin.com/in/mariasilva",
-            twitterLink: "https://twitter.com/mariasilva",
-            about: "Designer apaixonada por UI/UX.",
-            techs: "Figma, Photoshop, Illustrator",
-            followersCount: 200,
-            followingCount: 150,
-            createdAt: "2022-09-15",
-            lastModified: "2024-02-11"
-        }
-      },
-      {
-        id: 102,
-        content: "Muito inspirador esse projeto!",
-        likeCount: 3,
-        dislikeCount: 0,
-        commentCount: 0,
-        createdAt: new Date("2024-02-12T13:35:00Z"),
-        parentId: "1",
-        authorId: 2,
-        projectId: 1,
-        author: {
-          id: 2,
-          accountId: 102,
-          username: "mariasilva",
-          name: "Maria Silva",
-          title: "Designer",
-          githubLink: "https://github.com/mariasilva",
-          linkedinLink: "https://linkedin.com/in/mariasilva",
-          twitterLink: "https://twitter.com/mariasilva",
-          about: "Designer apaixonada por UI/UX.",
-          techs: "Figma, Photoshop, Illustrator",
-          followersCount: 200,
-          followingCount: 150,
-          createdAt: "2022-09-15",
-          lastModified: "2024-02-11"
-      }
-      }
-    ]
-  },
-  { 
-    id: 2, 
-    authorId: 2,
-    projectId: 1,
-    author: { 
-      id: 2,
-      accountId: 102,
-      username: "mariasilva",
-      name: "Maria Silva",
-      title: "Designer",
-      githubLink: "https://github.com/mariasilva",
-      linkedinLink: "https://linkedin.com/in/mariasilva",
-      twitterLink: "https://twitter.com/mariasilva",
-      about: "Designer apaixonada por UI/UX.",
-      techs: "Figma, Photoshop, Illustrator",
-      followersCount: 200,
-      followingCount: 150,
-      createdAt: "2022-09-15",
-      lastModified: "2024-02-11"
-    },
-    content: "Gostei muito da paleta de cores utilizada. Ficou excelente!", 
-    likeCount: 8,
-    dislikeCount: 0,
-    commentCount: 0,
-    createdAt: new Date("2024-02-11T14:30:00Z"),
-    subComments: []
-  },
-  { 
-    id: 3, 
-    authorId: 3,
-    projectId: 1,
-    author: { 
-      id: 3,
-      accountId: 103,
-      username: "joaopaulo",
-      name: "João Paulo Silva",
-      title: "Desenvolvedor",
-      githubLink: "https://github.com/joaopaulo",
-      linkedinLink: "https://linkedin.com/in/joaopaulo",
-      twitterLink: "https://twitter.com/joaopaulo",
-      about: "Engenheiro de software especializado em back-end.",
-      techs: "Java, Spring Boot, PostgreSQL",
-      followersCount: 180,
-      followingCount: 90,
-      createdAt: "2021-06-20",
-      lastModified: "2024-02-12"
-    },
-    content: "A arquitetura do código está muito boa. Qual stack você utilizou?", 
-    likeCount: 3,
-    dislikeCount: 0,
-    commentCount: 1,
-    createdAt: new Date("2024-02-12T13:22:00Z"),
-    subComments: [
-      {
-        id: 301,
-        content: "Também fiquei curioso para saber a stack!",
-        likeCount: 2,
-        dislikeCount: 0,
-        commentCount: 0,
-        createdAt: new Date("2024-02-12T13:40:00Z"),
-        parentId: "3",
-        authorId: 1,
-        projectId: 1,
-        author: { 
-          id: 1,
-          accountId: 101,
-          username: "kaynanwallen",
-          name: "Kaynan Wallen",
-          title: "Freelancer",
-          githubLink: "https://github.com/kaynanwallen",
-          linkedinLink: "https://linkedin.com/in/kaynanwallen",
-          twitterLink: "https://twitter.com/kaynanwallen",
-          about: "Desenvolvedor full-stack apaixonado por tecnologia.",
-          techs: "React, TypeScript, Node.js",
-          followersCount: 120,
-          followingCount: 80,
-          createdAt: "2023-05-10",
-          lastModified: "2024-02-12"
-        },
-      }
-    ]
-  }
-];
-
 interface ProjectDialogProps {
   project: ProjectViewInterface;
   detailCardOpen: boolean;
@@ -219,9 +40,7 @@ interface ProjectDialogProps {
 export const ProjectDialog = ({ project, detailCardOpen, setDetailCardOpen}: ProjectDialogProps) => {
   const [activeTab, setActiveTab] = useState("post");
   const [newComment, setNewComment] = useState("");
-  const [comments, setComments] = useState<CommentInterface[]>(mockComments);
-  const [replyingToId, setReplyingToId] = useState<number | null>(null);
-  const [replyContent, setReplyContent] = useState("");
+  const [comments, setComments] = useState<CommentInterface[]>(project.comments);
   const commentService = useCommentService()
   const [isSending, setIsSending] = useState(false)
 
@@ -250,46 +69,31 @@ export const ProjectDialog = ({ project, detailCardOpen, setDetailCardOpen}: Pro
     setNewComment("");
   };
 
-  const toggleLike = (commentId: number, isSubComment = false, parentId?: number) => {
-   
-  };
+  const handleAddReply = async (replyContent: string, commentId: number) => {
+    const response = await commentService.createComment({
+      content: replyContent,
+      projectId: project.id,
+      parentId: commentId
+    })
 
-  const toggleShowReplies = (commentId: number) => {
-    // const updatedComments = comments.map(comment => {
-    //   if (comment.id === commentId) {
-    //     return { ...comment, showAllReplies: !comment.showAllReplies };
-    //   }
-    //   return comment;
-    // });
-    // setComments(updatedComments);
-  };
+    if('error' in response){
+      toast({
+        title: "Erro ao adicionar comentário",
+        variant: 'destructive'
+      })
+      return
+    }
+    
+    setComments([...(comments.map((comment) => {
+      if(comment.id != commentId) return comment
 
-  const handleAddReply = (commentId: number) => {
-    // if (!replyContent.trim()) return;
-    
-    // const newReply: SubComment = {
-    //   id: Date.now(),
-    //   user: { name: "Usuário Atual", initial: "UA", avatar: null, role: "Você" },
-    //   content: replyContent,
-    //   date: new Date().toLocaleString('pt-BR'),
-    //   likes: 0,
-    //   userLiked: false
-    // };
-    
-    // const updatedComments = comments.map(comment => {
-    //   if (comment.id === commentId) {
-    //     return {
-    //       ...comment,
-    //       subComments: [...comment.subComments, newReply],
-    //       showAllReplies: true
-    //     };
-    //   }
-    //   return comment;
-    // });
-    
-    // setComments(updatedComments);
-    // setReplyContent("");
-    // setReplyingToId(null);
+      return {
+        ...comment,
+        subComments: [...(comment.subComments || []), {
+          ...response,
+        }]
+      }
+    }) || [])])
   };
 
   return (
@@ -315,7 +119,7 @@ export const ProjectDialog = ({ project, detailCardOpen, setDetailCardOpen}: Pro
                 <Heart className="h-4 w-4" /> Curtidas ({project.likeCount})
               </TabsTrigger>
               <TabsTrigger value="comments" className="flex items-center gap-1">
-                <MessageCircle className="h-4 w-4" /> Comentários ({project.commentCount})
+                <MessageCircle className="h-4 w-4" /> Comentários ({project.comments.length})
               </TabsTrigger>
             </TabsList>
 
@@ -431,7 +235,7 @@ export const ProjectDialog = ({ project, detailCardOpen, setDetailCardOpen}: Pro
                 <h3 className="font-medium">Comentários ({comments.length})</h3>
                 <div className="space-y-6">
                   {comments.map((comment) => (
-                    <CardComment comment={comment} setComments={setComments}/>
+                    <CardComment comment={comment} setComments={setComments} handleAddReply={handleAddReply}/>
                   ))}
                 </div>
               </div>

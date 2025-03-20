@@ -5,10 +5,19 @@ export type CommentType = {
   id: number;
   authorId: number;
   projectId: number;
+  parentId?: number;
   content: string;
   likeCount: number;
   dislikeCount: number;
   commentCount: number;
   createdAt: Date;
-  parentId?: string;
+}
+
+export type CommentReactionType = {
+    id: number,
+    commentId: number,
+    authorId: number,
+    reactionType: string,
+    createdAt: string,
+    lastModified: string
 }

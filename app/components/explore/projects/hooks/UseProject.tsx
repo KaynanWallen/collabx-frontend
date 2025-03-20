@@ -1,12 +1,12 @@
 import { redirect } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
 import { useState, useEffect, useMemo } from "react";
-import { ProjectType } from "~/@types/project";
+import { ProjectViewInterface } from "~/@interfaces/project.interface";
 import { useToast } from "~/hooks/use-toast";
 import { useProjectService } from "~/services/projects.service";
 
 export const useProjects = () => {
-  const [projects, setProjects] = useState<ProjectType[]>([]);
+  const [projects, setProjects] = useState<ProjectViewInterface[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("todos");
   const [dateFilter, setDateFilter] = useState<string>("todos");

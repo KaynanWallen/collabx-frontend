@@ -17,6 +17,8 @@
 //   lastModified: string,
 // }
 
+import { CommentReactionsDTOType } from "./comment-reaction";
+
 // export type CommentReactionsDTOType = {
 //   id: number,
 //   commentId: number,
@@ -43,13 +45,4 @@ export type CommentDTOType = {
   commentReaction?: CommentReactionsDTOType[]
   createdAt: string,
   lastModified: string,
-}
-
-export type CommentReactionsDTOType = {
-  id: number,
-  commentId: number,
-  authorId: number,
-  reactionType: string,
-  createdAt: string,
-  lastModified: string
 }

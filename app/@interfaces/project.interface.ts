@@ -1,5 +1,6 @@
-import { CommentType } from "~/@types/comment";
 import { ProfileType } from "~/@types/profile";
+import { CommentInterface } from "./comment.interface";
+import { CommentReactionType } from "~/@types/comment";
 
 export interface ProjectViewInterface {
   id: number;
@@ -16,5 +17,5 @@ export interface ProjectViewInterface {
   createdAt: Date;
   lastModified: Date;
   author: ProfileType;
-  comments: CommentType[];
+  comments: CommentInterface[];
 }
