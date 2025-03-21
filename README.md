@@ -1,40 +1,57 @@
-# Welcome to Remix!
+# Collbax - Frontend
 
-- 📖 [Remix docs](https://remix.run/docs)
+Collbax é um rede social para gestão e colaboração em projetos. A aplicação permite criar, visualizar e interagir com projetos e perfis de usuários, proporcionando uma experiência rica em interações.
 
-## Development
+## 🚀 Tecnologias Utilizadas
 
-Run the dev server:
+- **RemixJS** - Framework para o frontend
+- **Axios** - Requisições HTTP para comunicação com a API
+- **TailwindCSS** - Estilização e design responsivo
+- **Zustand** - Gerenciamento de estado
+- **React Hook Form** - Gerenciamento de formulários
 
-```shellscript
-npm run dev
-```
+## ✅ Checklist de Funcionalidades
 
-## Deployment
+| Funcionalidade       | Status |
+|----------------------|--------|
+| **Projetos**        |        |
+| Exibição            | ✅      |
+| Edição              | 💻     |
+| Pesquisa            | ⏳     |
+| Classificação por tags | ⏳  |
+| Inteligência de exibição | ⏳ |
+| **Comentários**     |        |
+| Comentar           | ✅      |
+| Curtir comentários | ✅      |
+| Responder comentários | ✅   |
+| Curtir respostas   | ✅      |
+| **Perfis de Usuários** |     |
+| Visualização       | ✅      |
+| Edição             | 💻     |
+| Sistema de follow  | ⏳     |
+| **Notificações**   |        |
+| E-mail             | ⏳     |
+| WhatsApp           | ⏳     |
 
-First, build your app for production:
+✅ - Concluído | 💻 - Em desenvolvimento | ⏳ - Planejado
 
-```sh
-npm run build
-```
+## 📷 Demonstração
 
-Then run the app in production mode:
+(Adicione aqui capturas de tela e GIFs demonstrando as funcionalidades)
 
-```sh
-npm start
-```
+## 📌 Como Contribuir
 
-Now you'll need to pick a host to deploy it to.
+Se deseja contribuir para o desenvolvimento do Collbax, sinta-se à vontade para abrir uma issue ou enviar um pull request.
 
-### DIY
+## ✒️ Autor
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
+Desenvolvido por **[Kaynan Wallen](https://github.com/seuperfil)**
 
-Make sure to deploy the output of `npm run build`
+## 📄 Licença
 
-- `build/server`
-- `build/client`
+Este projeto está sob a licença MIT - veja o arquivo [LICENSE](https://github.com/seuprojeto/licenca) para mais detalhes.
 
-## Styling
+---
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+Este README será atualizado conforme o progresso do desenvolvimento do Collbax. 🚀
+
