@@ -12,6 +12,7 @@ import { CommentInterface } from "~/@interfaces/comment.interface";
 import { ProfileType } from "~/@types/profile";
 import { useCommentService } from "~/services/comments.service";
 import { toast } from "~/hooks/use-toast";
+import useMyProfileStore from "~/hooks/useMyProfile";
 
 // Mock data para likes e comentários
 const mockLikes = [
@@ -43,6 +44,7 @@ export const ProjectDialog = ({ project, detailCardOpen, setDetailCardOpen}: Pro
   const [comments, setComments] = useState<CommentInterface[]>(project.comments);
   const commentService = useCommentService()
   const [isSending, setIsSending] = useState(false)
+  const {profile} = useMyProfileStore()
 
   const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -215,13 +217,14 @@ export const ProjectDialog = ({ project, detailCardOpen, setDetailCardOpen}: Pro
                   </div>
                   <Textarea 
                     className="w-full min-h-20"
-                    placeholder="Adicione um comentário..."
+                    placeholder={!profile ? "Entre com uma conta para comentar" : "Adicione um comentário..."}
                     value={newComment}
+                    disabled={!profile}
                     onChange={(e) => setNewComment(e.target.value)}
                   />
                 </div>
                 <div className="flex justify-end">
-                  <Button type="submit" disabled={!newComment.trim() || isSending}>
+                  <Button type="submit" disabled={!newComment.trim() || isSending || !profile}>
                     {isSending && <Loader className="animate-spin"/>}
                     {!isSending ? "Comentar" : 'Enviando...'}
                   </Button>

@@ -14,6 +14,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const sessionData = await getUserSession(request)
     if (!sessionData) {
+      console.error('Not Permited to access this route')
       return redirect('/auth/login')
     }
 

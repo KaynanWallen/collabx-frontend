@@ -37,6 +37,7 @@ export const useCommentService = () => {
         body: JSON.stringify(toggleReactionComment),
         method: 'POST',
       })
+      console.log(response)
       // Verifica se o status HTTP indica erro (ex: 401, 500)
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({

@@ -20,47 +20,80 @@ export const CardComment = ({ comment, setComments, handleAddReply }: { comment:
   const commentService = useCommentService()
   const { toast } = useToast()
 
-  const toggleLike = async () => {
-    setIsLiked(!isLiked)
-    setComments((prev) => {
-      return [...prev.map((c) => {
-        if(c.id == comment.id) {
-          return {
-            ...c,
-            likeCount: c.likeCount + (isLiked ? -1 : 1)
-          } as CommentInterface
-        }
-        return {
-          ...c
-        } as CommentInterface
-      })]
-    })
-    
-    console.log(comment.likeCount)
-    const response = await commentService.toggleReactionCommentService({
-      commentId: comment.id,
-      reactionType: 'like'
-    })
-
-    if('error' in response){
-      toast({
-        title: "Erro ao curtir comentário",
-        variant: 'destructive'
-      })
-      setIsLiked(!isLiked)
+  const toggleLike = async (comment_or_subcomment_id: number, isSubComment: boolean = false) => {
+    if(isSubComment){
       setComments((prev) => {
-        return [...prev.filter((c) => {
-          if(c.id == comment.id) {
+        return [...prev.map((c) => {
+          if(c.id == comment.id){
             return {
               ...c,
-              likeCount: isLiked ? (c.likeCount + 1) : (c.likeCount - 1)
+              subComments: c.subComments?.map((subComment) => {
+                if(subComment.id == comment_or_subcomment_id){
+                  const isLikedSubComment = subComment.commentReaction?.find((comment) => comment.reactionType == 'like' && (profile && comment.authorId == profile.id))
+                  let newSubCommentReactions = subComment.commentReaction || []
+                  console.log(isLikedSubComment)
+
+                  if(isLikedSubComment){
+                    newSubCommentReactions = newSubCommentReactions.filter((comment) => comment.id != isLikedSubComment.id) || []
+                  }else {
+                    newSubCommentReactions.push({
+                      id: newSubCommentReactions.length * 3,
+                      commentId: comment.id,
+                      authorId: profile?.id || 0,
+                      reactionType: 'like',
+                      createdAt: new Date().toISOString(),
+                      lastModified: new Date().toISOString()
+                    })
+                  }
+                  
+                  return {
+                    ...subComment,
+                    likeCount: subComment.likeCount + (isLikedSubComment ? -1 : 1),
+                    commentReaction: newSubCommentReactions
+                  } as CommentInterface
+                }
+                return {
+                  ...subComment
+                }
+              })
+            }
+          }
+
+          return {
+            ...c
+          }
+        })]
+      })
+    }else {
+      setIsLiked(!isLiked)
+      setComments((prev) => {
+        return [...prev.map((c) => {
+          if (c.id == comment_or_subcomment_id) {
+            return {
+              ...c,
+              likeCount: c.likeCount + (isLiked ? -1 : 1)
             } as CommentInterface
           }
+
           return {
             ...c
           } as CommentInterface
         })]
       })
+    }
+
+
+    const response = await commentService.toggleReactionCommentService({
+      commentId: comment_or_subcomment_id,
+      reactionType: 'like'
+    })
+
+    if ('error' in response) {
+      toast({
+        title: "Erro ao curtir comentário",
+        variant: 'destructive'
+      })
+      setIsLiked(!isLiked)
       return
     }
   };
@@ -89,12 +122,13 @@ export const CardComment = ({ comment, setComments, handleAddReply }: { comment:
                   variant="ghost"
                   size="sm"
                   className="h-auto p-0 flex items-center gap-1"
-                  onClick={() => toggleLike()}
+                  disabled={!profile}
+                  onClick={() => toggleLike(comment.id)}
                 >
                   <ThumbsUp
                     className={`h-4 w-4 ${isLiked ? 'fill-blue-700 text-blue-700' : 'text-primary'}`}
                   />
-                  
+
                   <span className="text-xs">{comment.likeCount}</span>
                 </Button>
 
@@ -103,10 +137,12 @@ export const CardComment = ({ comment, setComments, handleAddReply }: { comment:
                   size="sm"
                   className="h-auto p-0 flex items-center gap-1"
                   onClick={() => setReplyingToId(replyingToId === comment.id ? null : comment.id)}
+                  disabled={!profile}
                 >
                   <Reply className="h-4 w-4" />
                   <span className="text-xs">Responder</span>
                 </Button>
+
               </div>
 
               {/* Formulário de resposta */}
@@ -142,11 +178,10 @@ export const CardComment = ({ comment, setComments, handleAddReply }: { comment:
                         setReplyContent('')
                         setReplyingToId(null)
                       }}
-                      disabled={!replyContent.trim() || isSending}
+                      disabled={!replyContent.trim() || isSending || !profile}
                     >
                       {isSending && <Loader className="animate-spin" />}
                       {!isSending ? "Responder" : 'Enviando...'}
-
                     </Button>
                   </div>
                 </div>
@@ -181,7 +216,9 @@ export const CardComment = ({ comment, setComments, handleAddReply }: { comment:
 
             {/* Lista de sub-comentários */}
             {(showReplies || comment.subComments.length === 1) &&
-              comment.subComments.map((subComment) => (
+              comment.subComments.map((subComment) => {
+                const isLikedSubComment = subComment?.commentReaction?.find((comment) => (comment?.reactionType && comment?.reactionType == 'like') && (profile && comment.authorId == profile.id)) ? true : false
+                return (
                 <Card key={subComment.id} className="p-3 bg-muted/50">
                   <div className="flex gap-2">
                     <div className="flex h-8 w-8 items-center justify-center bg-purple-700 text-white rounded-md shrink-0 text-xs">
@@ -203,12 +240,13 @@ export const CardComment = ({ comment, setComments, handleAddReply }: { comment:
                           variant="ghost"
                           size="sm"
                           className="h-auto p-0 flex items-center gap-1"
-                        // onClick={() => toggleLike(subComment.id, true, comment.id)}
+                          disabled={!profile}
+                          onClick={() => toggleLike(subComment.id, true)}
                         >
                           <ThumbsUp
-                            // className={`h-3.5 w-3.5 ${subComment.userLiked ? 'fill-green-500 text-green-500' : 'text-muted-foreground'}`}
-                            className={`h-3.5 w-3.5 text-muted-foreground`}
+                            className={`h-4 w-4 ${isLikedSubComment ? 'fill-blue-700 text-blue-700' : 'text-primary'}`}
                           />
+
                           <span className="text-xs">{subComment.likeCount}</span>
                         </Button>
 
@@ -217,6 +255,7 @@ export const CardComment = ({ comment, setComments, handleAddReply }: { comment:
                           size="sm"
                           className="h-auto p-0 flex items-center gap-1"
                           onClick={() => setReplyingToId(replyingToId === comment.id ? null : comment.id)}
+                          disabled={!profile}
                         >
                           <Reply className="h-3.5 w-3.5" />
                           <span className="text-xs">Responder</span>
@@ -225,7 +264,7 @@ export const CardComment = ({ comment, setComments, handleAddReply }: { comment:
                     </div>
                   </div>
                 </Card>
-              ))
+              )})
             }
           </div>
         )}
