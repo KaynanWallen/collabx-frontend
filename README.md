@@ -49,7 +49,7 @@ Desenvolvido por **[Kaynan Wallen](https://github.com/KaynanWallen)**
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT - veja o arquivo [LICENSE](https://github.com/KaynanWallen) para mais detalhes.
+Este projeto está sob a licença MIT - veja o arquivo [LICENSE](https://github.com/KaynanWallen/collabx-frontend/blob/main/LICENSE) para mais detalhes.
 
 ---
 
