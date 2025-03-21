@@ -37,7 +37,7 @@ Collbax é um rede social para gestão e colaboração em projetos. A aplicaçã
 
 ## 📷 Demonstração
 
-(Adicione aqui capturas de tela e GIFs demonstrando as funcionalidades)
+<img src="./public/project-image.png" alt="Imagem tela inicial do projeto">
 
 ## 📌 Como Contribuir
 
