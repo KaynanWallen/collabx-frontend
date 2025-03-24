@@ -45,11 +45,11 @@ Se deseja contribuir para o desenvolvimento do Collbax, sinta-se à vontade para
 
 ## ✒️ Autor
 
-Desenvolvido por **[Kaynan Wallen](https://github.com/seuperfil)**
+Desenvolvido por **[Kaynan Wallen](https://github.com/KaynanWallen)**
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT - veja o arquivo [LICENSE](https://github.com/seuprojeto/licenca) para mais detalhes.
+Este projeto está sob a licença MIT - veja o arquivo [LICENSE](https://github.com/KaynanWallen/collabx-frontend/blob/main/LICENSE) para mais detalhes.
 
 ---
 
