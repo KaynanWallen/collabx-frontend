@@ -1,6 +1,7 @@
 import { ProfileType } from "~/@types/profile";
 import { CommentInterface } from "./comment.interface";
 import { CommentReactionType } from "~/@types/comment";
+import { ReactionType } from "~/@types/project-reaction";
 
 export interface ProjectViewInterface {
   id: number;
@@ -18,4 +19,10 @@ export interface ProjectViewInterface {
   lastModified: Date;
   author: ProfileType;
   comments: CommentInterface[];
+  reactions: ReactionType[]
+}
+
+export interface ToggleReactionProjectInterface {
+  projectId: number,
+  reactionType:string;
 }

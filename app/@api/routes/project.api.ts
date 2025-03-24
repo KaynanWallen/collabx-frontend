@@ -4,6 +4,7 @@ import { NewProjectDTOType } from "../DTO/project/new-project.dto";
 import { ProjectDTOType } from "../DTO/project/project.dto";
 import { FindProjectDTOType } from "../DTO/project/find-projects.dto.";
 import { apiGetMeInfos } from "./me.api";
+import { ToogleProjectReactionDTOType } from "../DTO/project/toogle-project.dto";
 
 export const apiCreateProject = async(project: NewProjectDTOType, token: string) => {
   try {
@@ -62,5 +63,32 @@ export const apiGetAllProject = async() => {
   } catch (error) {
     console.error(error)
     return { err: {message: 'Erro ao criar projeto', data: error}, status: 500}
+  }
+}
+
+export const apiToggleProjectReaction = async(projectReaction: ToogleProjectReactionDTOType, token: string) => {
+  try {
+    const response = await api.post('/projects-reactions/toggle', {
+      ...projectReaction
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      return {message: 'Reaction Success'}
+    }).catch((err: AxiosError) => {
+      console.log(err)
+      const messageError = err.response?.data as { message: string} || {message: 'Erro ao adicionar reação ao comentário'}
+      return { err: {message: messageError.message, data: err.response}, status: err.response?.status || 500}
+    })
+
+    if('err' in response){
+      return response
+    }
+
+    return response
+  } catch (error) {
+    console.error(error)
+    return { err: {message: 'Erro no toogle de reação de projeto', data: error}, status: 500}
   }
 }

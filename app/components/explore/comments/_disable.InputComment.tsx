@@ -1,7 +1,7 @@
 import { Mention, MentionsInput } from "react-mentions";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { CornerDownRight, MessageSquarePlus } from "lucide-react";
 
 interface CommentInputProps {

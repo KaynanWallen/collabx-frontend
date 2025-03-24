@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Eye, Heart, MessageCircle, ThumbsUp, ThumbsDown, Users, UserPlus, Reply, ChevronUp, ChevronDown, Loader } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
@@ -13,6 +13,7 @@ import { ProfileType } from "~/@types/profile";
 import { useCommentService } from "~/services/comments.service";
 import { toast } from "~/hooks/use-toast";
 import useMyProfileStore from "~/hooks/useMyProfile";
+import { useProjectLikes } from "./hooks/UseProjectLikes";
 
 // Mock data para likes e comentários
 const mockLikes = [
@@ -35,16 +36,23 @@ interface SubComment {
 interface ProjectDialogProps {
   project: ProjectViewInterface;
   detailCardOpen: boolean;
-  setDetailCardOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setDetailCardOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isLikedProject: boolean;
+  toogleLikeProject: () => void;
 }
 
-export const ProjectDialog = ({ project, detailCardOpen, setDetailCardOpen}: ProjectDialogProps) => {
+export const ProjectDialog = ({ project, detailCardOpen, setDetailCardOpen, isLikedProject, toogleLikeProject}: ProjectDialogProps) => {
   const [activeTab, setActiveTab] = useState("post");
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState<CommentInterface[]>(project.comments);
   const commentService = useCommentService()
+  const {projectLikes, setProjectLikes} = useProjectLikes()
   const [isSending, setIsSending] = useState(false)
   const {profile} = useMyProfileStore()
+
+  useEffect(() => {
+    setProjectLikes(project.reactions)
+  }, [])
 
   const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -162,7 +170,7 @@ export const ProjectDialog = ({ project, detailCardOpen, setDetailCardOpen}: Pro
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-1">
-                    <Heart className="h-5 w-5 cursor-pointer" />
+                  <Heart className={`h-4 w-4 ${profile && 'cursor-pointer'} ${isLikedProject ? "fill-red-500 text-red-500" : "text-muted-foreground"}`} onClick={() => profile && toogleLikeProject()}/>
                     <span>{project.likeCount}</span>
                   </div>
                   <Button 
@@ -191,14 +199,14 @@ export const ProjectDialog = ({ project, detailCardOpen, setDetailCardOpen}: Pro
               <div className="space-y-4">
                 <h3 className="font-medium">Pessoas que curtiram</h3>
                 <div className="space-y-3">
-                  {mockLikes.map((user) => (
-                    <div key={user.id} className="flex items-center gap-3">
+                  {projectLikes.map((pLike) => (
+                    <div key={pLike.id} className="flex items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center bg-purple-700 text-white rounded-md">
-                        {user.initial}
+                        {pLike.author.name.charAt(0)}
                       </div>
                       <div>
-                        <div className="font-medium">{user.name}</div>
-                        <div className="text-sm text-muted-foreground">{user.role}</div>
+                        <div className="font-medium">{pLike.author.name}</div>
+                        <div className="text-sm text-muted-foreground">{pLike.author.title}</div>
                       </div>
                     </div>
                   ))}

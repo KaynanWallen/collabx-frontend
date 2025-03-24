@@ -1,5 +1,6 @@
 import {
   ChevronRight,
+  Heart,
   MessageCircle,
   Star,
   ThumbsDown,
@@ -9,9 +10,34 @@ import { useState } from "react";
 import { ProjectViewInterface } from "~/@interfaces/project.interface";
 import { Button } from "~/components/ui/button";
 import { ProjectDialog } from "./DialogCardProject";
+import useMyProfileStore from "~/hooks/useMyProfile";
+import { useProjectService } from "~/services/projects.service";
+import { useToast } from "~/hooks/use-toast";
 
 export const CardProject = ({project}: {project: ProjectViewInterface}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const {profile} = useMyProfileStore()
+  const [isLikedProject, setIsLikedProject] = useState<boolean>(project.reactions.find((reaction) => reaction.reactionType == 'like' && (profile && reaction.author.id == profile.id)) ? true : false)
+  const projectService = useProjectService()
+  const {toast} = useToast()
+
+  const toogleLikeProject = async () => {
+    setIsLikedProject(!isLikedProject)
+    const response = await projectService.toggleReactionProjectService({
+      projectId: project.id,
+      reactionType: 'like'
+    })
+
+    if ('error' in response) {
+      toast({
+        title: "Erro ao curtir projeto",
+        variant: 'destructive'
+      })
+      setIsLikedProject(!isLikedProject)
+      return
+    }
+  }
+
 
   return (
     <>
@@ -49,18 +75,18 @@ export const CardProject = ({project}: {project: ProjectViewInterface}) => {
 
           {/* Interactions */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
-                <ThumbsUp className="h-4 w-4 text-green-500" />
+                <Heart className={`h-4 w-4 ${profile && 'cursor-pointer'} ${isLikedProject ? "fill-red-500 text-red-500" : "text-muted-foreground"}`} onClick={() => profile && toogleLikeProject()}/>
                 <span className="text-sm">{project.likeCount}</span>
               </div>
-              <div className="flex items-center gap-1">
+              {/* <div className="flex items-center gap-1">
                 <ThumbsDown className="h-4 w-4 text-red-500" />
                 <span className="text-sm">{project.dislikeCount}</span>
-              </div>
+              </div> */}
               <div className="flex items-center gap-1">
                 <MessageCircle className="h-4 w-4 text-blue-500" />
-                <span className="text-sm">{project.comments.length}</span>
+                <span className="text-sm">{project.commentCount}</span>
               </div>
               <button>
                 <Star
@@ -86,7 +112,7 @@ export const CardProject = ({project}: {project: ProjectViewInterface}) => {
         </div>
       </div>
       
-      <ProjectDialog detailCardOpen={isOpen} setDetailCardOpen={setIsOpen} project={project}/>
+      <ProjectDialog detailCardOpen={isOpen} setDetailCardOpen={setIsOpen} project={project} isLikedProject={isLikedProject} toogleLikeProject={toogleLikeProject}/>
     </>
   );
 };

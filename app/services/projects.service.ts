@@ -1,4 +1,4 @@
-import { ProjectViewInterface } from "~/@interfaces/project.interface";
+import { ProjectViewInterface, ToggleReactionProjectInterface } from "~/@interfaces/project.interface";
 
 export const useProjectService = () => {
   const findAllProjects = async() => {
@@ -24,8 +24,33 @@ export const useProjectService = () => {
       return {error , status: 500}
     }
   }
+  
+  const toggleReactionProjectService = async(toggleReactionComment: ToggleReactionProjectInterface) => {
+    try {
+      const baseUrl = typeof window === 'undefined' 
+      ? process.env.VITE_BASE_URL || 'http://127.0.0.1:2222' 
+      : window.location.origin;
+  
+      const response = await fetch(`${baseUrl}/api/projects/toggle-reaction`, {
+        body: JSON.stringify(toggleReactionComment),
+        method: 'POST',
+      })
+      console.log(response)
+      // Verifica se o status HTTP indica erro (ex: 401, 500)
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({
+          err: "Erro desconhecido ao processar a resposta",
+        }));
+        return { error: errorData.err as string, status: response.status };
+      }
 
+      return {data: 'Reaction Success', status: 200}
+    } catch (error) {
+      return {error , status: 500}
+    }
+  }
   return {
     findAllProjects,
+    toggleReactionProjectService
   };
 }

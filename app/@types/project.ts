@@ -1,5 +1,6 @@
 import { CommentType } from "./comment";
 import { ProfileType } from "./profile";
+import { ReactionType } from "./project-reaction";
 
 export type ProjectType = {
   id: number;
